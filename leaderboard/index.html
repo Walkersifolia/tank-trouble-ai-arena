@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#09111c">
+  <meta name="description" content="坦克动荡全部公开 AI 的官方战力榜。公开赛程、积分规则与评测进度，统一比较单挑和四人混战表现。">
+  <title>AI 战力榜 · Tank Trouble</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../web/style.css">
+  <link rel="stylesheet" href="./style.css">
+  <script type="module" src="./page.js"></script>
+</head>
+<body>
+  <main class="league-page">
+    <header class="league-nav"><a class="league-brand" href="../">TANK TROUBLE <span>AI ARENA</span></a><a class="back-link" href="../">← 返回竞技场</a></header>
+    <section class="league-hero">
+      <div><p class="eyebrow">OFFICIAL LEAGUE</p><h1>AI 战力榜</h1><p class="league-intro">同一赛季，同一规则。全部公开 AI 在单挑与四人混战中的联赛成绩。</p></div>
+      <label class="season-picker">查看赛季<select id="season-select" disabled><option>加载赛季…</option></select></label>
+    </section>
+    <div id="load-message" class="load-message" role="status">正在读取官方评测数据…</div>
+    <div id="season-content" hidden>
+      <section class="season-overview panel" aria-labelledby="season-name">
+        <div class="season-heading"><div><div class="season-title"><h2 id="season-name"></h2><span id="season-status" class="status-badge"></span></div><p id="season-updated" class="muted"></p></div><a class="rules-link" href="#rules">评分规则 ↗</a></div>
+        <div class="season-progress"><div class="progress-copy"><span>赛季总进度</span><strong id="total-progress"></strong></div><progress id="progress-bar" value="0" max="1" aria-label="赛季评测进度"></progress></div>
+        <div class="overview-grid"><div><span>公开选手</span><strong id="entrant-count"></strong></div><div><span>单挑已完成 / 计划</span><strong id="duel-progress"></strong></div><div><span>混战已完成 / 计划</span><strong id="ffa-progress"></strong></div><div><span>比赛规则</span><strong id="rules-summary"></strong></div></div>
+        <p id="timing-note" class="hint" hidden></p>
+      </section>
+      <section class="leaderboard-section" aria-labelledby="board-title">
+        <div class="board-heading"><div><h2 id="board-title">综合战力</h2><p id="board-description" class="muted"></p></div><div class="board-tabs" role="group" aria-label="选择榜单"><button class="selected" data-board="overall" aria-pressed="true">综合榜</button><button data-board="duel" aria-pressed="false">单挑榜</button><button data-board="ffa" aria-pressed="false">四人混战榜</button></div></div>
+        <p id="ranking-notice" class="ranking-notice"></p>
+        <div class="official-board"><table aria-label="官方 AI 战力排行榜"><thead><tr><th scope="col">名次</th><th scope="col">选手 / 脚本版本</th><th scope="col" data-score-header="overall">综合分</th><th scope="col" data-score-header="duel">单挑分</th><th scope="col" data-score-header="ffa">混战分</th><th scope="col">已完成 / 计划</th><th scope="col">状态 / 交手详情</th></tr></thead><tbody id="standings-body"></tbody></table></div>
+        <p class="board-footnote">满分 100；同分并列，辅助统计不参与排名。分数最多显示四位小数，名次按原始积分计算。点击选手的「交手详情」查看对手成绩。</p>
+      </section>
+      <section id="rules" class="panel rules-panel" aria-labelledby="rules-title">
+        <p class="eyebrow">SCORING & SCHEDULE</p><h2 id="rules-title">公开评分规则</h2>
+        <div class="scoring-grid"><div><span class="rule-number">01</span><h3>单挑成绩</h3><p>每局胜 / 平 / 负计 <b>100 / 50 / 0</b> 分。先算对每名对手的平均得分，再对所有对手等权平均。</p></div><div><span class="rule-number">02</span><h3>四人混战成绩</h3><p>每局胜者计 <b>100</b> 分，其余计 <b>0</b> 分；无人获胜也均计 0 分并单独统计。成绩为均衡赛程中的平均每局得分。</p></div><div><span class="rule-number">03</span><h3>综合战力</h3><p><b>单挑 × 50% + 混战 × 50%</b>。两项均完成后才形成正式成绩。击杀、自杀、超时等仅作辅助统计。</p></div></div>
+        <div class="rule-notes"><p>故障按正式运行器为每名选手记录的 outcome 结算：故障选手记负、得 0 分，计入场次和评分分母。全员故障各得 0 分，并单独统计；不能根据「无胜者」将所有人判平。</p><p>一个赛季冻结公开名单、选手脚本、引擎与规则。策略、引擎或规则实质变化，以及新增公开选手，进入下一轮完整赛季；历史成绩保留原版本说明。未完成统一赛程时不发布正式名次，暂定成绩的样本可能不均衡，缺失分项显示「—」。</p></div>
+        <details class="schedule-details"><summary>本季赛程、规则与运行环境</summary><div id="season-specification"></div></details>
+      </section>
+      <footer class="league-footer"><div><strong>官方评测，所有访客共享</strong><p>由维护者在统一环境串行运行，定期发布本页数据。你的娱乐对局仍只保存在原个人排行榜，不会提交到官方榜。</p></div><a href="../">返回竞技场 →</a></footer>
+    </div>
+    <noscript><p class="load-message error">此页面需要 JavaScript 才能读取官方榜单。请启用 JavaScript 后刷新。</p></noscript>
+  </main>
+</body>
+</html>

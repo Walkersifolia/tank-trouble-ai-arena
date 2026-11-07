@@ -8,7 +8,8 @@
     "kit:package": "node devtools/training/scripts/package-ai-kit.mjs",
     "training:package": "node devtools/training/scripts/package-training-arena.mjs",
     "training": "electron devtools/training/server/training-server.cjs",
-    "arena": "node devtools/matches/run.mjs"
+    "arena": "node devtools/matches/run.mjs",
+    "leaderboard": "node leaderboard/cli.mjs"
   },
   "engines": {
     "node": ">=20"

@@ -13,7 +13,7 @@ Web 是唯一游戏版本，支持真人挑战、AI 连续混战、回放诊断�
 | `index.html`、`web/` | 唯一网页入口、交互、回放和视频导出 | 公开 |
 | `engine/` | 共享物理、观测、执行隔离、录像与渲染 | 公开 |
 | `bots/` | 已授权公开的独立 AI；`roster.json` 为网站清单 | 公开 |
-| `leaderboard/` | 现有浏览器本地榜单统计与展示 | 公开 |
+| `leaderboard/` | 官方战力榜静态页面、评测工具与公开聚合结果；保留浏览器个人榜单 | 公开 |
 | `devtools/training/` | 黑盒训练服务、客户端、运行界面、开发包和打包脚本 | 公开 |
 | `devtools/matches/` | 可复用的可信脚本无界面对战工具 | 公开 |
 | `devtools/research/proteus/` | 无相评测结论、精简结果、失败案例与构造场景 | 公开 |
@@ -21,7 +21,7 @@ Web 是唯一游戏版本，支持真人挑战、AI 连续混战、回放诊断�
 | `learning-ai/` | 神谕源码、原环境、模型、完整检查点、记录及必要冻结引擎 | 仅本地 |
 | `local-data/` | 私有选手、训练任务与配置、日志、回放、原版研究及大型工具包 | 仅本地 |
 
-无相、原版 Opus、Astra Gen3 和已获授权的导师保留原策略行为。研究结果保留真实限制，见 [无相报告](devtools/research/proteus/README.md)。当前榜单只统计本浏览器娱乐对局，不是全网官方战力榜，也不将旧研究成绩混入排名。
+无相、原版 Opus、Astra Gen3 和已获授权的导师保留原策略行为。研究结果保留真实限制，见 [无相报告](devtools/research/proteus/README.md)。[官方 AI 战力榜](https://walkersifolia.github.io/tank-trouble-ai-arena/leaderboard/) 使用独立统一赛季，未完成评测时明确展示进度和暂定统计；不导入旧研究结果。个人娱乐对局继续只累计本浏览器战绩。
 
 ## 启动
 
@@ -37,6 +37,9 @@ npm run training
 
 # 可信脚本对战，参数与结果格式见研究说明
 npm run arena -- --bot proteus=bots/astra-g4-proteus.js --bot opus=bots/opus-g1-prescience.js --seeds 1 --trace off --out local-data/matches.json
+
+# 官方联赛：创建、评测、暂停、续跑与导出见 leaderboard/README.md
+npm run leaderboard -- status --season 2026-s1
 
 # 构建可分发工具包
 npm run kit:package
@@ -56,6 +59,6 @@ Node.js 20+ 用于对战和开发工具；黑盒服务使用已有 Electron，�
 
 `learning-ai/`、`local-data/`、运行环境及日志由忽略规则留在本地，不应强制加入提交。原中文仓库的 Git 元数据只移入 `learning-ai/legacy-history.git`，作为无工作区、无远端的本地历史；公开 `main` 继续原 GitHub 历史，两者不合并。协作前确认使用本目录；新增公开选手必须有发布授权。
 
-[网页使用说明](web/README.md) · [训练工具说明](devtools/training/README.md) · [本地榜单说明](leaderboard/README.md) · [项目约定](AGENTS.md)
+[网页使用说明](web/README.md) · [训练工具说明](devtools/training/README.md) · [排行榜与评测说明](leaderboard/README.md) · [项目约定](AGENTS.md)
 
 引擎源于 [AbyssWhalen/tank-trouble](https://github.com/AbyssWhalen/tank-trouble)，许可见 [LICENSE](LICENSE)。Opus 来源为 [Sakura1618 的 PR #2](https://github.com/Walkersifolia/tank-trouble-ai-arena/pull/2)，无相保留来源说明；Planck 许可见 [engine/vendor/planck.LICENSE.txt](engine/vendor/planck.LICENSE.txt)。
