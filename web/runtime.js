@@ -1,6 +1,6 @@
 import { ArenaWorld, DT } from '../engine/arena/world.js';
 import { observe } from '../engine/arena/observation.js';
-import { BotSandbox, IDLE } from '../engine/arena/sandbox.js';
+import { BotSandbox, IDLE } from '../engine/arena/sandbox.js?v=play-mode-1';
 import { ArenaRenderer } from '../engine/arena/render.js';
 import { MatchRecording } from '../engine/arena/recording.js';
 
@@ -31,6 +31,7 @@ export class ChallengeGame {
     const session = this.session;
     this.players = players;
     this.rules = rules;
+    this.enforceDecisionBudget = !players.some(p => p.kind === 'human');
     this.speed = players.some(p => p.kind === 'human') ? 1 : rules.speed;
     this.headless = !players.some(p => p.kind === 'human') && rules.headless;
     this.humanAction = { ...IDLE };
@@ -46,7 +47,9 @@ export class ChallengeGame {
       id: recordingId, sessionId: recordingId, round, entrants: players,
       detail: players.some(p => p.kind === 'human') || rules.detailRecording,
     });
-    this.bots = players.filter(p => p.kind === 'ai').map(p => new BotSandbox(p));
+    this.bots = players.filter(p => p.kind === 'ai').map(p => new BotSandbox(p, {
+      enforceDecisionBudget: this.enforceDecisionBudget,
+    }));
     const world = this.world, bots = this.bots;
     this.update('loading');
     this.render(session);
@@ -154,7 +157,7 @@ export class ChallengeGame {
         if (slow !== this.slowDevice) {
           this.slowDevice = slow;
           this.onNotice(slow
-            ? `当前模拟速度 ${this.simRate.toFixed(2)}×，目标 ${this.speed}×。物理仍为固定 60 Hz，弹速、碰撞与 AI 的 50 ms 决策预算保持原规则。`
+            ? `当前模拟速度 ${this.simRate.toFixed(2)}×，目标 ${this.speed}×。物理仍为固定 60 Hz，弹速与碰撞不变。${this.enforceDecisionBudget ? 'AI 对战保留 50 ms 决策预算。' : '真人游玩不因 AI 决策超过 50 ms 判负。'}`
             : '已达到所选观战速度。');
         }
         this.sampleTime = now;

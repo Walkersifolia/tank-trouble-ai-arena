@@ -84,8 +84,10 @@ function validateAction(action) {
 }
 
 export class BotSandbox {
-  constructor(entrant) {
+  constructor(entrant, { enforceDecisionBudget = true } = {}) {
     this.entrant = entrant;
+    // 真人游玩只免除决策预算判负，初始化与无响应硬中断仍保留。
+    this.decisionBudget = enforceDecisionBudget ? LIMITS.decisionMs : Infinity;
   }
 
   // 仅固定 Math.random；保留真实 Date / performance 和原有决策计时。
@@ -104,7 +106,7 @@ export class BotSandbox {
     this.frame.onload = () => this.frame.contentWindow.postMessage({ worker: `(${workerMain.toString()})(${createRng.toString()})` }, '*', [channel.port2]);
     document.body.append(this.frame);
     await ready;
-    await this.request({ type: 'init', source: this.entrant.source, seed: this.seed, budget: LIMITS.decisionMs }, LIMITS.initMs);
+    await this.request({ type: 'init', source: this.entrant.source, seed: this.seed, budget: this.decisionBudget }, LIMITS.initMs);
   }
 
   receive(data) {

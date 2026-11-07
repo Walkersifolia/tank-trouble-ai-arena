@@ -1,4 +1,4 @@
-import { ChallengeGame } from './runtime.js';
+import { ChallengeGame } from './runtime.js?v=play-mode-1';
 import { HumanControls } from './controls.js';
 import { ReplayPanel, downloadRecording } from './replay-panel.js?v=arena-native-1';
 import { recordAIResult, renderLocalRanking } from '../leaderboard/local.js';
@@ -20,10 +20,18 @@ try {
   if (saved) { settings = saved.settings || {}; stats = { ...emptyStats(), ...saved.stats }; aiStats = saved.aiStats || {}; }
 } catch { storageAvailable = false; }
 let mode = settings.mode || 'human', sequence = 0, presets = [], seats = [], lastMatch = null;
-let noticeTimer, starting = false, importTarget = null, replaceSeat = null, hudSignature = '';
+let noticeTimer, rotateHintTimer, starting = false, importTarget = null, replaceSeat = null, hudSignature = '';
 let series = null, nextRoundTimer, latestRecording = null;
 const recentResults = [];
 const sourceCache = new Map();
+const portraitTouch = matchMedia('(orientation: portrait) and (pointer: coarse)');
+
+function updateRotateHint() {
+  clearTimeout(rotateHintTimer);
+  $('rotate-hint').hidden = $('battle').hidden || !portraitTouch.matches;
+  if (!$('rotate-hint').hidden) rotateHintTimer = setTimeout(() => { $('rotate-hint').hidden = true; }, 4000);
+}
+portraitTouch.addEventListener('change', updateRotateHint);
 
 function notice(message, error = false) {
   $('notice').textContent = message;
@@ -241,7 +249,7 @@ const game = new ChallengeGame({
     const human = game.players.find(p => p.kind === 'human');
     const tank = world.actors.find(p => p.id === human?.id)?.tank;
     $('weapon-status').textContent = !tank ? '观战中 · 所有选手本地运算' : !tank.alive ? '你已阵亡 · 继续观战' : [tank.laserShots ? `激光 ×${tank.laserShots}` : tank.scatterShots ? `散射 ×${tank.scatterShots}` : '普通炮弹', tank.mineCharges ? `地雷 ×${tank.mineCharges}` : '', tank.shield ? `护盾 ${Math.ceil(tank.shieldTimer)}s` : ''].filter(Boolean).join(' · ');
-    $('performance-status').textContent = `${simRate.toFixed(2)}× 实际速度 · 固定 60 Hz · 50 ms 决策预算`;
+    $('performance-status').textContent = `${simRate.toFixed(2)}× 实际速度 · 固定 60 Hz · ${human ? '无 50 ms 决策判负' : '50 ms 决策预算'}`;
   }, onEnd: showResult, onNotice: message => notice(message, true),
 });
 const controls = new HumanControls({ joystick: $('joystick'), knob: $('knob'), fireButton: $('fire-button'), specialButton: $('special-button'),
@@ -276,6 +284,7 @@ async function startMatch(repeat = false, sameSeed = false, nextRound = false) {
   starting = true;
   $('result-dialog').close();
   $('lobby').hidden = true; $('battle').hidden = false; document.body.classList.add('playing');
+  if (!nextRound) updateRotateHint();
   $('battle-mode').textContent = players.some(p => p.kind === 'human') ? 'HUMAN vs AI' : 'AI vs AI';
   $('series-toolbar').hidden = !aiOnly; $('live-ranking-panel').hidden = !aiOnly;
   $('series-progress').textContent = `第 ${series.completed + 1} / ${series.total || '∞'} 局`;
@@ -295,6 +304,7 @@ function returnToLobby() {
   if (series) series.active = false;
   game.stop(); controls.setEnabled(false); $('result-dialog').close();
   $('battle').hidden = true; $('lobby').hidden = false; document.body.classList.remove('playing');
+  updateRotateHint();
   if (document.fullscreenElement) document.exitFullscreen().catch(() => {});
 }
 async function importFiles(files) {
@@ -350,8 +360,7 @@ $('fullscreen').onclick = async () => {
   try {
     if (document.fullscreenElement) { await document.exitFullscreen(); return; }
     await $('battle').requestFullscreen();
-    try { await screen.orientation.lock('landscape'); } catch { notice('已进入全屏；若画面竖直，请手动将手机转为横屏。'); }
-  } catch { notice('此浏览器未提供全屏，请将手机横屏使用。'); }
+  } catch { notice('此浏览器未提供全屏，可继续在当前画面游玩。'); }
 };
 $('reset-records').onclick = () => {
   if (confirm('清除本浏览器的真人挑战战绩？此操作不可撤销，不影响 AI 排行榜。')) { stats = emptyStats(); save(); renderStats(); }
