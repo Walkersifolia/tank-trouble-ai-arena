@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../web/style.css">
   <link rel="stylesheet" href="./style.css">
   <script type="module" src="./page.js"></script>
+  <script type="module" src="./candidates.js"></script>
 </head>
 <body>
   <main class="league-page">
@@ -35,11 +36,16 @@
       <section id="rules" class="panel rules-panel" aria-labelledby="rules-title">
         <p class="eyebrow">SCORING & SCHEDULE</p><h2 id="rules-title">公开评分规则</h2>
         <div class="scoring-grid"><div><span class="rule-number">01</span><h3>单挑成绩</h3><p>每局胜 / 平 / 负计 <b>100 / 50 / 0</b> 分。先算对每名对手的平均得分，再对所有对手等权平均。</p></div><div><span class="rule-number">02</span><h3>四人混战成绩</h3><p>每局胜者计 <b>100</b> 分，其余计 <b>0</b> 分；无人获胜也均计 0 分并单独统计。成绩为均衡赛程中的平均每局得分。</p></div><div><span class="rule-number">03</span><h3>综合战力</h3><p><b>单挑 × 50% + 混战 × 50%</b>。两项均完成后才形成正式成绩。击杀、自杀、超时等仅作辅助统计。</p></div></div>
-        <div class="rule-notes"><p>故障按正式运行器为每名选手记录的 outcome 结算：故障选手记负、得 0 分，计入场次和评分分母。全员故障各得 0 分，并单独统计；不能根据「无胜者」将所有人判平。</p><p>一个赛季冻结公开名单、选手脚本、引擎与规则。策略、引擎或规则实质变化，以及新增公开选手，进入下一轮完整赛季；历史成绩保留原版本说明。未完成统一赛程时不发布正式名次，暂定成绩的样本可能不均衡，缺失分项显示「—」。</p></div>
+        <div class="rule-notes"><p>故障按正式运行器为每名选手记录的 outcome 结算：故障选手记负、得 0 分，计入场次和评分分母。全员故障各得 0 分，并单独统计；不能根据「无胜者」将所有人判平。</p><p>一个赛季冻结公开名单、选手脚本、引擎与规则。新增 AI 先独立预评测，旧榜分数与名次保持不变；下一轮完整赛季再全员重跑。策略、引擎或规则实质变化时也另开新季，历史成绩保留原版本说明。未完成统一赛程时不发布正式名次，缺失分项显示「—」。</p></div>
         <details class="schedule-details"><summary>本季赛程、规则与运行环境</summary><div id="season-specification"></div></details>
       </section>
       <footer class="league-footer"><div><strong>官方评测，所有访客共享</strong><p>由维护者在统一环境串行运行，定期发布本页数据。你的娱乐对局仍只保存在原个人排行榜，不会提交到官方榜。</p></div><a href="../">返回竞技场 →</a></footer>
     </div>
+    <section class="leaderboard-section" aria-labelledby="candidate-title">
+      <div class="board-heading"><div><h2 id="candidate-title">新 AI 预评测</h2><p class="muted">新选手单独评分，旧榜保持不动；下次完整赛季再统一排名。</p></div></div>
+      <p class="ranking-notice">只运行新 AI 参加的对局，复用同样的积分公式。预评分不与旧季成绩混排，旧选手作为固定对手参赛，不重算旧榜分数与名次。</p>
+      <div id="candidate-list"><p class="hint">正在读取新 AI 预评测…</p></div>
+    </section>
     <noscript><p class="load-message error">此页面需要 JavaScript 才能读取官方榜单。请启用 JavaScript 后刷新。</p></noscript>
   </main>
 </body>

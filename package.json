@@ -9,7 +9,8 @@
     "training:package": "node devtools/training/scripts/package-training-arena.mjs",
     "training": "electron devtools/training/server/training-server.cjs",
     "arena": "node devtools/matches/run.mjs",
-    "leaderboard": "node leaderboard/cli.mjs"
+    "leaderboard": "node leaderboard/cli.mjs",
+    "leaderboard:candidate": "node leaderboard/candidate.mjs"
   },
   "engines": {
     "node": ">=20"
