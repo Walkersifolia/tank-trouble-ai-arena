@@ -6,7 +6,7 @@
 // ============================================================
 
 import { TANK, BULLET, POWERUP, THEME } from "./config.js";
-import { resolveCircleWalls, segmentVsSegmentParam } from "./collision.js";
+import { resolveCircleWalls, segmentVsSegmentParam, circleCastSegmentDistance } from "./collision.js?v=wall-shot-1";
 import { Bullet } from "./bullet.js";
 import { Mine } from "./mine.js";
 import { neutralMods } from "./upgrades.js";
@@ -115,7 +115,7 @@ export class Tank {
     }
 
     // 激光：消耗一发，返回发射意图；打完存货自动恢复普通弹
-    // 出膛点做贴墙修正（与 spawnBullet 同一套钳位），否则贴墙时从墙背面出膛
+    // 激光出膛点沿中心线做贴墙修正；普通弹另按弹体半径扫掠截断。
     if (this.laserShots > 0) {
       this.laserShots--;
       return { bullets: [], laser: this.muzzlePoint(walls) };
@@ -154,8 +154,8 @@ export class Tank {
   // angle 一并给出方便直接作发射意图。
   // walls: 给了就做贴墙修正——炮口(36px)比车体碰撞半径(16px)伸出 20px，
   //   贴墙时炮口已越到墙另一侧，从那里投射激光会从墙背面出膛 = 隔墙杀。
-  //   这与 spawnBullet 里注释「穿墙 bug 的根因」的是同一处几何，子弹早有
-  //   钳位、激光原先没有（阶段 28.3 补）。钳位后贴墙开激光会撞墙反弹回来
+  //   此处保留激光的中心线钳位；spawnBullet 另按弹体半径处理墙身与端点。
+  //   钳位后贴墙开激光会撞墙反弹回来
   //   打死自己，与子弹「贴脸怼墙开炮会弹回来」的既有手感一致。
   //   省略 walls 时行为与钳位前逐字节相同（旧调用点语义不变）。
   // 注意：钳位后出膛点可能落在自己车体圆内，故 main/arena 的 fireLaser
@@ -185,26 +185,22 @@ export class Tank {
     // 炮口位置：从车体中心沿朝向伸出（炮管末端再多探出一点，避免子弹生成在车体内被自己挡）
     const muzzleDist = TANK.bodyLength / 2 + TANK.barrelLength + BULLET.radius + 2;
 
-    // 贴墙出膛修正：炮口(36px)比车体碰撞半径(16px)伸得远，贴墙时炮口已越到
-    // 墙外侧，子弹会凭空出现在墙另一边——穿墙 bug 的根因。
-    // 沿"中心→炮口"连线探测所有墙，被截断就把出膛点压回墙内侧一点。
-    // 压回后子弹下一帧即被墙反射，贴脸怼墙开炮会弹回来——原版同款自杀手感。
+    // 按弹体半径扫过“车心→炮口”，不能只判炮口中心是否跨过墙线。
+    // 出生圆必须留在首次接触前；否则首步可能跨墙，再被反向推出到墙背面。
+    const dx = Math.cos(heading), dy = Math.sin(heading);
     let spawnDist = muzzleDist;
     if (walls && walls.length) {
-      const mx = this.x + Math.cos(heading) * muzzleDist;
-      const my = this.y + Math.sin(heading) * muzzleDist;
       for (const w of walls) {
-        const t = segmentVsSegmentParam(this.x, this.y, mx, my, w.x1, w.y1, w.x2, w.y2);
-        if (t !== null) {
-          spawnDist = Math.min(spawnDist, t * muzzleDist - BULLET.radius - 1);
-        }
+        const distance = circleCastSegmentDistance(this.x, this.y, dx, dy,
+          BULLET.radius, w.x1, w.y1, w.x2, w.y2);
+        if (distance <= muzzleDist) spawnDist = Math.min(spawnDist, distance - 1);
       }
     }
 
-    const bx = this.x + Math.cos(heading) * spawnDist;
-    const by = this.y + Math.sin(heading) * spawnDist;
-    const vx = Math.cos(heading) * BULLET.speed;
-    const vy = Math.sin(heading) * BULLET.speed;
+    const bx = this.x + dx * spawnDist;
+    const by = this.y + dy * spawnDist;
+    const vx = dx * BULLET.speed;
+    const vy = dy * BULLET.speed;
     const b = new Bullet(bx, by, vx, vy, this);
     b.kind = kind;
     b.erodePower = 1 + (this.mods?.erode ?? 0); // 破障弹头：每次反弹多削几点墙

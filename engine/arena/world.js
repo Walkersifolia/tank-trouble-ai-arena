@@ -1,6 +1,6 @@
 // 基于上游 scripts/arena.mjs 的逐 Tick 结算，实体、碰撞与地图仍使用原引擎。
 import { generateMaze, destroyWallsInRadius, destroyWallSegments } from '../maze.js';
-import { Tank } from '../tank.js';
+import { Tank } from '../tank.js?v=wall-shot-1';
 import { PowerupSpawner } from '../powerup.js';
 import { castLaserPath } from '../laser.js';
 import { circleVsCircle, closestPointOnSegment } from '../collision.js';

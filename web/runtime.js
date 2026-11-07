@@ -1,4 +1,4 @@
-import { ArenaWorld, DT } from '../engine/arena/world.js';
+import { ArenaWorld, DT } from '../engine/arena/world.js?v=wall-shot-1';
 import { observe } from '../engine/arena/observation.js';
 import { BotSandbox, IDLE } from '../engine/arena/sandbox.js?v=play-mode-1';
 import { ArenaRenderer } from '../engine/arena/render.js';

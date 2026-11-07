@@ -1,4 +1,4 @@
-import { ChallengeGame } from './runtime.js?v=play-mode-1';
+import { ChallengeGame } from './runtime.js?v=wall-shot-1';
 import { HumanControls } from './controls.js';
 import { ReplayPanel, downloadRecording } from './replay-panel.js?v=arena-native-1';
 import { recordAIResult, renderLocalRanking } from '../leaderboard/local.js';

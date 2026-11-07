@@ -44,6 +44,34 @@ export function circleVsSegment(cx, cy, r, x1, y1, x2, y2) {
   return { nx: nx / dist, ny: ny / dist, depth: r - dist };
 }
 
+// 圆心沿单位方向 (dx,dy) 前进，首次接触墙线段的距离。
+// 起点在墙外；墙段按圆半径扩成胶囊，两侧与端点都参与出膛截断。
+export function circleCastSegmentDistance(x, y, dx, dy, r, x1, y1, x2, y2) {
+  const wx = x2 - x1, wy = y2 - y1;
+  const length = Math.hypot(wx, wy);
+  const nx = -wy / length, ny = wx / length;
+  const offset = (x - x1) * nx + (y - y1) * ny;
+  const normalSpeed = dx * nx + dy * ny;
+  let distance = Infinity;
+  if (normalSpeed !== 0) {
+    for (const side of [-1, 1]) {
+      const t = (side * r - offset) / normalSpeed;
+      const along = ((x + dx * t - x1) * wx + (y + dy * t - y1) * wy) / (length * length);
+      if (t >= 0 && along >= 0 && along <= 1) distance = Math.min(distance, t);
+    }
+  }
+  for (const [cx, cy] of [[x1, y1], [x2, y2]]) {
+    const ox = x - cx, oy = y - cy;
+    const projection = ox * dx + oy * dy;
+    const discriminant = projection * projection - (ox * ox + oy * oy - r * r);
+    if (discriminant >= 0) {
+      const t = -projection - Math.sqrt(discriminant);
+      if (t >= 0) distance = Math.min(distance, t);
+    }
+  }
+  return distance;
+}
+
 // 把圆从所有相交的墙里推出来。
 // 逐墙解算并把圆心沿法线推出穿透深度——多墙时迭代几遍收敛，
 // 角落里被两面墙夹住也能稳定停住（这就是"沿墙滑动"的来源：
