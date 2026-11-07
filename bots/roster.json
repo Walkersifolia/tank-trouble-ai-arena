@@ -156,6 +156,16 @@
     "script": "./bots/deepseek-g5-mentor.js"
   },
   {
+    "id": "deepseek-g6-chaos",
+    "name": "DeepSeek Gen6「混沌」",
+    "codename": "CHAOS",
+    "color": "#a98bff",
+    "description": "DeepSeek 第六代选手。「你无形，我无序。」",
+    "group": "deepseek",
+    "order": 6,
+    "script": "./bots/deepseek-g6-chaos.js"
+  },
+  {
     "id": "opus-g1-prescience",
     "name": "Opus Gen1「先机」",
     "codename": "PRESCIENCE",
