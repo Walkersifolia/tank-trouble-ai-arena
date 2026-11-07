@@ -164,5 +164,15 @@
     "group": "opus",
     "order": 1,
     "script": "./bots/opus-g1-prescience.js"
+  },
+  {
+    "id": "opus-g2-ouroboros",
+    "name": "Opus Gen2「衔尾」",
+    "codename": "OUROBOROS",
+    "color": "#5a7be3",
+    "description": "Opus 第二代选手：以自己为对手迭代，自我对弈覆盖单挑、多人混战和道具玩法。",
+    "group": "opus",
+    "order": 2,
+    "script": "./bots/opus-g2-ouroboros.js"
   }
 ]
