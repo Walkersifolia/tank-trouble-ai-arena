@@ -6,7 +6,7 @@
 
 ## 1. 启动服务端
 
-在仓库根目录双击 **`启动训练场.cmd`**，或运行下面的命令。公开默认陪练为 Astra Gen1「裁决者」和 ChatGPT Gen1「织局者」，配置位于 `devtools/training/opponents.json`。本机已有的五名私有陪练继续由 `local-data/training/opponents.json` 管理；该文件存在时服务优先使用它。先用客户端 `opponents` 查询本机实际 ID。
+双击 **`devtools/training/start.cmd`**，或运行下面的命令。公开默认陪练为 Astra Gen1「裁决者」和 ChatGPT Gen1「织局者」，配置位于 `devtools/training/opponents.json`。本机已有的五名私有陪练继续由 `local-data/training/opponents.json` 管理；该文件存在时服务优先使用它。先用客户端 `opponents` 查询本机实际 ID。
 
 在持有主项目的 Windows 用户下打开 PowerShell：
 
