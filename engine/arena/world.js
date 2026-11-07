@@ -32,10 +32,10 @@ export class ArenaWorld {
     const spawnRng = createRng(this.seeds.spawnSeed);
     const orderRng = createRng(this.seeds.orderSeed);
     const powerupRng = createRng(this.seeds.powerupSeed);
-    // 以双人 7×5 格为基准，长宽随人数的平方根增长，面积随人数增长。
+    // 小场地至少 9×7 格；更多选手仍沿用随人数平方根增长的地图尺寸。
     const scale = Math.sqrt(entrants.length / 2);
-    const cols = Math.ceil(MAZE_TIERS.small.cols * scale);
-    const rows = Math.ceil(MAZE_TIERS.small.rows * scale);
+    const cols = Math.max(MAZE_TIERS.medium.cols, Math.ceil(MAZE_TIERS.small.cols * scale));
+    const rows = Math.max(MAZE_TIERS.medium.rows, Math.ceil(MAZE_TIERS.small.rows * scale));
     this.style = options.mapStyle || pick(['sparse', 'symmetric', 'rooms'], mapRng);
     this.maze = generateMaze(cols, rows, this.style, mapRng);
     // 隔一格安排一个候选出生位；此地图尺寸下候选数足够容纳全部参赛者。

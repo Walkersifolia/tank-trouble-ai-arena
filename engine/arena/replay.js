@@ -2,6 +2,7 @@ import { Tank } from '../tank.js';
 import { Bullet } from '../bullet.js';
 import { Powerup } from '../powerup.js';
 import { Mine } from '../mine.js';
+import { TANK_COLLISION } from '../config.js';
 
 // 只还原绘图对象。这里不调用物理 step、选手脚本或成绩存储。
 export class MatchReplay {
@@ -16,6 +17,8 @@ export class MatchReplay {
     this.wallVersion = -1;
     this.world = {
       maze: { ...record.initialState.map, walls: [] }, actors: [], bullets: [], powerups: [], mines: [], events: [], tick: 0,
+      tankRenderScale: record.physics.tankCollision.bodyLength / TANK_COLLISION.bodyLength,
+      tankRadius: record.physics.tankRadius,
       get alive() { return this.actors.filter(p => p.tank.alive); },
     };
     this.seek(0);

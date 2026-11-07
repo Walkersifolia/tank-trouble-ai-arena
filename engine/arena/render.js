@@ -1,4 +1,4 @@
-import { CELL_SIZE, WALL, THEME } from '../config.js';
+import { CELL_SIZE, WALL, THEME, TANK } from '../config.js';
 import { renderLaserPreview, LaserBeam } from '../laser.js';
 import { TankExplosion, MuzzleFlash, ShieldBreak, PickupFlash, MineBlast } from '../effects.js';
 import { TankDisplayPoses } from '../tank-pose.js';
@@ -69,16 +69,21 @@ export class ArenaRenderer {
     world.bullets.forEach(b => b.render(ctx));
     // 只有精灵/姓名跟随显示 pose；预瞄、命中与观察仍读取真实 Tank。
     const drawPoses = new Map();
+    const { tankRenderScale = 1, tankRadius = TANK.radius } = world;
     world.actors.forEach(p => {
       const pose = this.tankPoses.get(p.tank, renderDt, paused);
       drawPoses.set(p.tank, pose);
-      p.tank.render(ctx, pose);
+      ctx.save();
+      ctx.translate(pose.x, pose.y);
+      ctx.scale(tankRenderScale, tankRenderScale);
+      p.tank.render(ctx, { x: 0, y: 0, angle: pose.angle });
+      ctx.restore();
     });
     for (const p of world.alive) {
       ctx.font = 'bold 14px "Microsoft YaHei", sans-serif';
       ctx.textAlign = 'center'; ctx.lineWidth = 3; ctx.strokeStyle = '#eeeeef'; ctx.fillStyle = '#222735';
       const pose = drawPoses.get(p.tank);
-      const labelY = Math.max(16, pose.y - 29);
+      const labelY = Math.max(16, pose.y - tankRadius - 13);
       ctx.strokeText(p.name, pose.x, labelY); ctx.fillText(p.name, pose.x, labelY);
     }
     if (!paused) this.effects.forEach(e => e.update(elapsed));

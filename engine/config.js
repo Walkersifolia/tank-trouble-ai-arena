@@ -39,8 +39,8 @@ export const TIER_POOL_BY_MODE = {
 };
 
 // 内部每条格子边放墙的概率（稀疏格栅的核心参数）。
-// 越小越空旷、越适合追逐跳弹；越大越接近走迷宫。0.25~0.35 比较像原版。
-export const WALL_DENSITY = 0.28;
+// 越小越空旷、越适合追逐跳弹；越大越接近走迷宫。
+export const WALL_DENSITY = 0.40;
 
 // 生成结果的**退化下限**（阶段 28.1）：内墙数 / 内部边总数 低于 minDensity 就重抽一张，
 // 最多重抽 tries 次（有界，绝不死循环；抽满仍不达标就交付——地图必须有，宁空旷勿无图）。
@@ -70,8 +70,8 @@ export const MAZE_STYLES = {
   // 原先这里写死一个 0.28、而生成器读的是顶层 WALL_DENSITY，于是本字段是个
   // **死旋钮**：改它零效果，改 WALL_DENSITY 又看不到本表跟着动。见阶段 28.6
   sparse:    { label: "稀疏格栅", density: WALL_DENSITY },
-  symmetric: { label: "对称竞技场", density: 0.30 },
-  rooms:     { label: "房间走廊", roomMin: 2, roomMax: 3, extraDoorChance: 0.5 },
+  symmetric: { label: "对称竞技场", density: 0.40 },
+  rooms:     { label: "房间走廊", roomMin: 2, roomMax: 3, extraDoorChance: 0.25 },
 };
 export const STYLE_POOL_BY_MODE = {
   pvp: ["sparse", "symmetric", "rooms"],
@@ -86,30 +86,30 @@ export const STYLE_POOL_BY_MODE = {
 // 坐标约定：车体朝向 +x（炮管指向右），渲染时已 rotate 到 angle。
 //   长(length) = 沿炮管方向(x)的尺寸；宽(width) = 垂直方向(y)的尺寸。
 export const TANK = {
-  radius: 16,            // 武器命中/拾取半径；运动接触使用下方画面轮廓
+  radius: 24,            // 武器命中/拾取半径；运动接触使用下方画面轮廓
 
   moveSpeed: CELL_SIZE * 1.595,    // 前进153.12px/s，原版1.595格/s
   reverseSpeed: CELL_SIZE * 1.28,  // 倒车122.88px/s，原版1.28格/s
   turnSpeed: 5.0,                 // 弧度/秒；连续输入直接缩放，无驾驶惯性
 
   // 车体（中间的彩色方块）
-  bodyLength: 26,        // 沿炮管方向
-  bodyWidth: 20,         // 垂直方向（不含履带）
+  bodyLength: 39,        // 沿炮管方向
+  bodyWidth: 30,         // 垂直方向（不含履带）
 
   // 履带（上下两条深色横条，比车体略长、两端探出）
-  treadLength: 34,       // 沿炮管方向，比车体长 → 两端露出
-  treadWidth: 7,         // 单条履带的厚度
-  treadInset: 1,         // 履带内缘与车体边缘的重叠/间隙微调
+  treadLength: 51,       // 含履带车身占96px格子的约半格
+  treadWidth: 10.5,      // 单条履带的厚度
+  treadInset: 1.5,       // 履带内缘与车体边缘的重叠/间隙微调
 
   // 炮塔（中央圆盘）
-  turretRadius: 8,
+  turretRadius: 12,
 
   // 炮管（从炮塔伸出的圆头短管）
-  barrelLength: 18,      // 从炮塔中心向前伸出的长度
-  barrelWidth: 5,        // 炮管粗细
+  barrelLength: 27,      // 从炮塔中心向前伸出的长度
+  barrelWidth: 7.5,      // 炮管粗细
 };
 
-// 运动接触轮廓跟随现有美术：含履带车身、圆头炮管；武器命中圆不变。
+// 运动接触轮廓跟随美术尺寸：含履带车身、圆头炮管。
 export const TANK_COLLISION = {
   bodyLength: TANK.treadLength,
   bodyWidth: TANK.bodyWidth + 2 * (TANK.treadWidth - TANK.treadInset),
