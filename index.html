@@ -7,9 +7,9 @@
   <meta name="description" content="在你自己的手机或电脑上，亲自驾驶坦克挑战 JavaScript AI。无需登录，纯本地计算。">
   <title>Tank Trouble · AI 竞技场</title>
   <link rel="icon" href="data:,">
-  <link rel="stylesheet" href="./web-challenge/style.css">
-  <link rel="stylesheet" href="./web-challenge/replay-panel.css">
-  <script type="module" src="./web-challenge/app.js?v=arena-native-1"></script>
+  <link rel="stylesheet" href="./web/style.css">
+  <link rel="stylesheet" href="./web/replay-panel.css">
+  <script type="module" src="./web/app.js?v=modules-1"></script>
 </head>
 <body>
   <main id="lobby" class="lobby">
@@ -18,9 +18,9 @@
       <h1>坦克动荡</h1>
       <p class="hero-subtitle">真人挑战与 AI 对战</p>
       <div class="hero-actions"><button id="quick-start" class="primary">开始挑战 <span>↗</span></button><button id="watch-mode" class="secondary">AI 对战观战</button><button id="import-top" class="text-button">＋ 导入 AI</button></div>
-      <div class="tool-downloads"><a class="secondary download-link" href="./AI_Starter_Kit.zip" download="AI_Starter_Kit.zip">↓ AI 开发包</a><a class="secondary download-link" href="https://github.com/Walkersifolia/tank-trouble-ai-arena/releases/latest/download/AI_Training_Arena_Windows_x64.zip" download="AI_Training_Arena_Windows_x64.zip">↓ 本地黑盒训练场 <small>Windows x64 · 102.7 MB</small></a><button id="open-recording" class="text-button">打开录像</button></div>
+      <div class="tool-downloads"><a class="secondary download-link" href="./downloads/AI_Starter_Kit.zip" download="AI_Starter_Kit.zip">↓ AI 开发包</a><a class="secondary download-link" href="https://github.com/Walkersifolia/tank-trouble-ai-arena/releases/latest/download/AI_Training_Arena_Windows_x64.zip" download="AI_Training_Arena_Windows_x64.zip">↓ 本地黑盒训练场 <small>Windows x64 · 102.7 MB</small></a><button id="open-recording" class="text-button">打开录像</button></div>
       </div>
-      <img class="arena-art" src="./web-challenge/arena.svg" alt="坦克发射的激光经墙壁反射，击中另一辆正在爆炸的坦克" width="800" height="480">
+      <img class="arena-art" src="./web/arena.svg" alt="坦克发射的激光经墙壁反射，击中另一辆正在爆炸的坦克" width="800" height="480">
     </section>
     <div class="section-heading"><h2>选择对手</h2></div>
     <section id="preset-list" class="preset-groups" aria-label="预设 AI"></section>
@@ -47,7 +47,7 @@
         <div id="roster" class="roster"></div>
         <p id="roster-empty" class="hint" hidden>从下拉菜单添加网站选手，或导入自己的 CommonJS AI。</p>
         <input id="file-input" type="file" accept=".js,.cjs,text/javascript,application/javascript" multiple hidden>
-        <p class="kit-note"><a href="./AI_Starter_Kit.zip" download="AI_Starter_Kit.zip">下载开发工具包 ZIP</a></p>
+        <p class="kit-note"><a href="./downloads/AI_Starter_Kit.zip" download="AI_Starter_Kit.zip">下载开发工具包 ZIP</a></p>
         <p class="privacy-note">脚本仅在本机运行，刷新后需重新导入。</p>
       </div>
     </section>

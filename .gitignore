@@ -1,22 +1,15 @@
+# Local-only ORACLE source, models, environments and original local Git history.
+/learning-ai/
+# Private entrants, jobs, tokens, replays, research downloads and large packages.
+/local-data/
 node_modules/
 /dist/
-/training/*
-!/training/scripts/
-!/training/starter-kit/
-!/training/server/
-!/training/client/
-!/training/portable/
-!/training/README.md
-!/training/API.md
-!/training/opponents.json
-/training/client/config.json
 training-results/
+/devtools/training/client/config.json
 *.log
 .env
 .env.*
-
-# Local ORACLE source, checkpoints, opponents and training state are never published.
-/learning-ai/
-/AI_players/
-/arena/gamelogs/
-/arena/replay/
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

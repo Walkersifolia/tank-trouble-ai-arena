@@ -5,10 +5,10 @@
   "type": "module",
   "description": "Tank Trouble Web 唯一维护版本、策略批量对战与本地训练工具",
   "scripts": {
-    "kit:package": "node training/scripts/package-ai-kit.mjs",
-    "training:package": "node training/scripts/package-training-arena.mjs",
-    "training": "electron training/server/training-server.cjs",
-    "arena": "node research/proteus/run.mjs"
+    "kit:package": "node devtools/training/scripts/package-ai-kit.mjs",
+    "training:package": "node devtools/training/scripts/package-training-arena.mjs",
+    "training": "electron devtools/training/server/training-server.cjs",
+    "arena": "node devtools/matches/run.mjs"
   },
   "engines": {
     "node": ">=20"
