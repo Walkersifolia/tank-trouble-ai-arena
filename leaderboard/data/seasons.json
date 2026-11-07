@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "seasons": [
+    {
+      "id": "2026-s1",
+      "label": "2026 · 第一赛季",
+      "url": "./data/2026-s1.json",
+      "updatedAt": "2026-11-07T02:35:26.615Z",
+      "status": "running",
+      "createdAt": "2026-11-07T02:34:12.046Z"
+    }
+  ]
+}
